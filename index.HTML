@@ -1,1 +1,1779 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الامتحان الإلكتروني - التجارة الإلكترونية</title>
+    <style>
+        /* جميع أنماط CSS السابقة محفوظة كما هي */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --bg-color: #f5f7fa;
+            --card-bg: white;
+            --text-color: #333;
+            --border-color: #ddd;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #f0f0f0;
+            --border-color: #444;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        h1, h2, h3 {
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn-secondary {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e67e22;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .question-container {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+        
+        .options-container {
+            margin-top: 15px;
+        }
+        
+        .option {
+            margin-bottom: 10px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .true-false-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .true-false-btn {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+        
+        .true-false-btn.selected-true {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+        
+        .true-false-btn.selected-false {
+            background-color: var(--danger-color);
+            color: white;
+            border-color: var(--danger-color);
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background-color: #eee;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .result-container {
+            text-align: center;
+        }
+        
+        .score {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: rgba(0,0,0,0.05);
+        }
+        
+        .correct-answer {
+            color: var(--success-color);
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+        
+        .wrong-answer {
+            color: var(--danger-color);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        .review-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .review-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .correct {
+            border-left: 5px solid var(--success-color);
+        }
+        
+        .incorrect {
+            border-left: 5px solid var(--danger-color);
+        }
+        
+        .timer {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: rgba(0,0,0,0.05);
+            color: var(--dark-color);
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .alert-success {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .exam-type-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .exam-type-btn {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+        
+        .exam-type-btn.selected {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .warning-message {
+            background-color: var(--warning-color);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .student-info-display {
+            background-color: rgba(52, 152, 219, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-right: 5px solid var(--primary-color);
+        }
+
+        .resume-exam-section {
+            background-color: rgba(243, 156, 18, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-right: 5px solid var(--warning-color);
+        }
+
+        .score-details {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+        }
+
+        .final-message {
+            background-color: rgba(52, 152, 219, 0.1);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+        }
+        
+        .question-counter {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .navigation-buttons button {
+            flex: 1;
+        }
+        
+        .question-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-left: 10px;
+        }
+        
+        .question-navigation-dots {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 20px 0;
+        }
+        
+        .question-dot {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .question-dot.answered {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .question-dot.current {
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .question-dot.unanswered {
+            background-color: #eee;
+            color: #666;
+        }
+
+        /* زر الخروج الطارئ الجديد */
+        .emergency-exit-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            z-index: 1001;
+            transition: all 0.3s;
+        }
+
+        .emergency-exit-btn:hover {
+            transform: scale(1.1);
+            background-color: #c0392b;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .true-false-container {
+                flex-direction: column;
+            }
+            
+            .exam-type-selector {
+                flex-direction: column;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                left: 10px;
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            
+            .score-details {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .navigation-buttons {
+                flex-direction: column;
+            }
+            
+            .question-navigation-dots {
+                gap: 5px;
+            }
+            
+            .question-dot {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+            }
+
+            .emergency-exit-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                bottom: 10px;
+                left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="theme-toggle">🌙</button>
+
+    <!-- زر الخروج الطارئ -->
+    <button class="emergency-exit-btn" id="emergency-exit-btn" title="خروج طارئ من الامتحان">🚪</button>
+
+    <div class="container">
+        <!-- شاشة تسجيل الطالب -->
+        <div id="student-info-screen" class="card">
+            <h1>نظام الامتحان الإلكتروني</h1>
+            <p class="question-counter">الملخص: التجارة الإلكترونية</p>
+            
+            <div class="warning-message">
+                ⚠️ تنبيه: بعد بدء الامتحان لا يمكنك العودة لتعديل البيانات أو الخروج من الصفحة
+            </div>
+
+            <!-- قسم استئناف الامتحان -->
+            <div id="resume-exam-section" class="resume-exam-section hidden">
+                <h3>امتحان قيد التقدم</h3>
+                <p>يوجد امتحان غير مكتمل. هل تريد الاستئناف من حيث توقفت؟</p>
+                <div id="resume-exam-info"></div>
+                <button id="resume-exam-btn" class="btn-secondary">استئناف الامتحان</button>
+                <button id="restart-new-exam-btn" class="btn-danger">بدء امتحان جديد</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="student-name">اسم الطالب:</label>
+                <input type="text" id="student-name" placeholder="أدخل اسمك الكامل">
+            </div>
+            
+            <div class="form-group">
+                <label for="student-id">الرقم الدراسي:</label>
+                <input type="text" id="student-id" placeholder="أدخل رقمك الدراسي">
+            </div>
+            
+            <div class="form-group">
+                <label>اختر نوع الامتحان:</label>
+                <div class="exam-type-selector">
+                    <div class="exam-type-btn" data-type="true-false">صح وخطأ</div>
+                    <div class="exam-type-btn" data-type="multiple-choice">اختر الإجابة الصحيحة</div>
+                    <div class="exam-type-btn" data-type="mixed">امتحان شامل</div>
+                </div>
+            </div>
+            
+            <button id="start-exam-btn">بدء الامتحان</button>
+        </div>
+        
+        <!-- شاشة الامتحان -->
+        <div id="exam-screen" class="card hidden">
+            <h2>امتحان التجارة الإلكترونية</h2>
+            
+            <div class="student-info-display">
+                <div><strong>الطالب:</strong> <span id="display-student-name"></span></div>
+                <div><strong>الرقم الدراسي:</strong> <span id="display-student-id"></span></div>
+                <div><strong>نوع الامتحان:</strong> <span id="display-exam-type"></span></div>
+            </div>
+            
+            <div class="warning-message">
+                ⚠️ تحذير: أي محاولة للخروج من هذه الصفحة ستؤدي إلى إنهاء الامتحان تلقائياً
+            </div>
+            
+            <div class="timer" id="timer">الوقت المتبقي: 60:00</div>
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+            
+            <!-- نقاط التنقل بين الأسئلة -->
+            <div class="question-navigation-dots" id="question-navigation">
+                <!-- سيتم إضافة نقاط الأسئلة هنا ديناميكيًا -->
+            </div>
+            
+            <div id="questions-container">
+                <!-- سيتم إضافة الأسئلة هنا ديناميكيًا -->
+            </div>
+            
+            <div class="navigation-buttons">
+                <button id="prev-question-btn" class="btn-secondary hidden">السؤال السابق</button>
+                <button id="next-question-btn" class="btn-secondary">السؤال التالي</button>
+            </div>
+            
+            <button id="submit-exam-btn">تسليم الإجابات</button>
+        </div>
+        
+        <!-- شاشة النتائج -->
+        <div id="results-screen" class="card hidden">
+            <h2>نتيجة الامتحان</h2>
+            <div class="result-container">
+                <p id="student-info-result"></p>
+                <div class="score" id="score-display"></div>
+                <div id="result-message"></div>
+                
+                <div class="score-details">
+                    <div><strong>الدرجة الكلية:</strong> <span id="total-score">0</span> من 30</div>
+                    <div><strong>عدد الأسئلة الصحيحة:</strong> <span id="correct-count">0</span> من <span id="total-questions">0</span></div>
+                </div>
+
+                <div class="final-message">
+                    <h3>🎓 الامتحان مكتمل</h3>
+                    <p>لقد أكملت الامتحان بنجاح. هذه هي نتيجتك النهائية.</p>
+                    <p><strong>لا يمكن إعادة الامتحان مرة أخرى.</strong></p>
+                </div>
+                
+                <h3>تفاصيل الإجابات:</h3>
+                <div id="answers-review">
+                    <!-- سيتم إضافة مراجعة الإجابات هنا -->
+                </div>
+            </div>
+        </div>
+
+        <!-- شاشة الإنهاء القسري -->
+        <div id="forced-submit-screen" class="card hidden">
+            <h2>تم إنهاء الامتحان</h2>
+            <div class="result-container">
+                <div class="warning-message">
+                    ⚠️ تم إنهاء الامتحان بسبب محاولة الخروج من الصفحة
+                </div>
+                <p id="forced-student-info"></p>
+                <div class="score" id="forced-score-display"></div>
+                <div id="forced-result-message"></div>
+                
+                <div class="score-details">
+                    <div><strong>الدرجة الكلية:</strong> <span id="forced-total-score">0</span> من 30</div>
+                    <div><strong>عدد الأسئلة الصحيحة:</strong> <span id="forced-correct-count">0</span> من <span id="forced-total-questions">0</span></div>
+                </div>
+
+                <div class="final-message">
+                    <h3>⚠️ انتهى الامتحان</h3>
+                    <p>تم إنهاء الامتحان بسبب محاولة الخروج من الصفحة.</p>
+                    <p><strong>لا يمكن إعادة الامتحان مرة أخرى.</strong></p>
+                </div>
+                
+                <h3>تفاصيل الإجابات:</h3>
+                <div id="forced-answers-review">
+                    <!-- سيتم إضافة مراجعة الإجابات هنا -->
+                </div>
+            </div>
+        </div>
+
+        <!-- شاشة الامتحان المنتهي -->
+        <div id="exam-completed-screen" class="card hidden">
+            <h2>امتحان مكتمل</h2>
+            <div class="result-container">
+                <div class="alert alert-warning">
+                    ⚠️ لقد أكملت هذا الامتحان مسبقاً ولا يمكنك إعادة المحاولة
+                </div>
+                <p id="completed-student-info"></p>
+                <div class="score" id="completed-score-display"></div>
+                <div id="completed-result-message"></div>
+                
+                <div class="score-details">
+                    <div><strong>الدرجة الكلية:</strong> <span id="completed-total-score">0</span> من 30</div>
+                    <div><strong>عدد الأسئلة الصحيحة:</strong> <span id="completed-correct-count">0</span> من <span id="completed-total-questions">0</span></div>
+                </div>
+
+                <div class="final-message">
+                    <h3>📝 الامتحان مكتمل مسبقاً</h3>
+                    <p>لقد أكملت هذا الامتحان من قبل وهذه هي نتيجتك.</p>
+                    <p><strong>لا يمكن إعادة الامتحان مرة أخرى.</strong></p>
+                </div>
+                
+                <h3>تفاصيل الإجابات السابقة:</h3>
+                <div id="completed-answers-review">
+                    <!-- سيتم إضافة مراجعة الإجابات هنا -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات الأسئلة المحسنة والمتقدمة مع إجابات مختلطة - موضوع التجارة الإلكترونية
+        const questions = [
+            {
+                id: 1,
+                text: "ما هي أنواع التجارة الإلكترونية مع الأمثلة الصحيحة؟",
+                type: "multiple-choice",
+                options: [
+                    "B2C: الشركات تبيع للمستهلكين (مثال: أمازون)، B2B: الشركات تبيع لشركات أخرى (مثال: علي بابا)، C2C: الأفراد يبيعون لآخرين (مثال: إيباي)، C2B: الأفراد يقدمون خدمات للشركات (مثال: فريلانسر)",
+                    "B2B: الشركات تبيع للمستهلكين، B2C: الشركات تبيع لشركات أخرى، C2B: الأفراد يبيعون لآخرين، C2C: الأفراد يقدمون خدمات للشركات",
+                    "جميع أنواع التجارة الإلكترونية متشابهة ولا يوجد فرق بينها",
+                    "C2C هي الوحيدة المهمة في التجارة الإلكترونية"
+                ],
+                correctAnswer: 0,
+                explanation: "B2C: الشركات تبيع للمستهلكين (مثال: أمازون)، B2B: الشركات تبيع لشركات أخرى (مثال: علي بابا)، C2C: الأفراد يبيعون لآخرين (مثال: إيباي)، C2B: الأفراد يقدمون خدمات للشركات (مثال: فريلانسر)",
+                points: 3
+            },
+            {
+                id: 2,
+                text: "ما هي أهمية التجارة الإلكترونية للشركات الصغيرة والمتوسطة؟",
+                type: "multiple-choice",
+                options: [
+                    "الوصول الواسع إلى عملاء عالميين، التكلفة المنخفضة، المرونة في التشغيل، التسويق الفعال",
+                    "الوصول المحدود للعملاء، التكلفة المرتفعة، المرونة المحدودة، التسويق التقليدي فقط",
+                    "لا يوجد أهمية للشركات الصغيرة والمتوسطة",
+                    "تقتصر على الشركات الكبيرة فقط"
+                ],
+                correctAnswer: 0,
+                explanation: "التجارة الإلكترونية تمكن الشركات الصغيرة والمتوسطة من: الوصول الواسع إلى عملاء عالميين، تقليل التكاليف، التشغيل على مدار الساعة، واستخدام أدوات تسويق رقمية فعالة.",
+                points: 3
+            },
+            {
+                id: 3,
+                text: "التجارة الإلكترونية أقل تكلفة من التجارة التقليدية لأنها لا تحتاج إلى متاجر فعلية.",
+                type: "true-false",
+                correctAnswer: true,
+                explanation: "هذه العبارة صحيحة. التجارة الإلكترونية تقلل من الحاجة للمتاجر الفعلية والموظفين، مما يخفض التكاليف بشكل كبير.",
+                points: 3
+            },
+            {
+                id: 4,
+                text: "ما هو الفرق الرئيسي بين التجارة الإلكترونية والتجارة التقليدية؟",
+                type: "multiple-choice",
+                options: [
+                    "التجارة الإلكترونية تتم عبر الإنترنت بدون موقع مادي، بينما التجارة التقليدية تحتاج لمتاجر فعلية",
+                    "التجارة الإلكترونية أكثر تكلفة من التجارة التقليدية",
+                    "لا يوجد فرق بينهما",
+                    "التجارة التقليدية أكثر تطوراً من التجارة الإلكترونية"
+                ],
+                correctAnswer: 0,
+                explanation: "الفرق الرئيسي هو أن التجارة الإلكترونية تتم عبر الإنترنت بدون حاجة لمتاجر فعلية، بينما التجارة التقليدية تعتمد على مواقع مادية وموظفين.",
+                points: 3
+            },
+            {
+                id: 5,
+                text: "التفاعل مع العملاء في التجارة الإلكترونية يكون مباشراً وجهاً لوجه كما في التجارة التقليدية.",
+                type: "true-false",
+                correctAnswer: false,
+                explanation: "هذه العبارة خاطئة. في التجارة الإلكترونية، التفاعل مع العملاء يكون عبر الإنترنت (محادثات، تعليقات، رسائل)، بينما في التجارة التقليدية يكون وجهاً لوجه.",
+                points: 3
+            },
+            {
+                id: 6,
+                text: "ما هي أبرز التحديات في التجارة الإلكترونية؟",
+                type: "multiple-choice",
+                options: [
+                    "الأمن الإلكتروني، المنافسة الشديدة، مشاكل الشحن والتسليم",
+                    "سهولة التنفيذ، قلة المنافسة، عدم وجود مخاطر",
+                    "انعدام التحديات في التجارة الإلكترونية",
+                    "التحديات مقتصرة على الجانب التقني فقط"
+                ],
+                correctAnswer: 0,
+                explanation: "أبرز التحديات تشمل: الأمن الإلكتروني وحماية البيانات، المنافسة الشديدة من المتاجر الأخرى، ومشاكل الشحن والتسليم.",
+                points: 3
+            },
+            {
+                id: 7,
+                text: "يمكن حل تحديات التجارة الإلكترونية باستخدام تقنيات التشفير وتحسين تجربة العملاء واستخدام منصات شحن موثوقة.",
+                type: "true-false",
+                correctAnswer: true,
+                explanation: "هذه العبارة صحيحة. استخدام تقنيات التشفير يحسن الأمان، وتحسين تجربة العملاء يزيد الولاء، واستخدام منصات شحن موثوقة يحل مشاكل التسليم.",
+                points: 3
+            },
+            {
+                id: 8,
+                text: "ما هي أهمية التسويق عبر الفيديو في التجارة الإلكترونية؟",
+                type: "multiple-choice",
+                options: [
+                    "يعزز التفاعل ويعرض المنتج بشكل أكثر تأثيراً ويزيد فرص الشراء",
+                    "لا أهمية له في التجارة الإلكترونية",
+                    "يقلل من مبيعات المنتجات",
+                    "يقتصر على العروض الترويجية فقط"
+                ],
+                correctAnswer: 0,
+                explanation: "التسويق عبر الفيديو يعزز التفاعل مع العملاء، ويعرض المنتجات بشكل أكثر واقعية وتأثيراً من الصور والنصوص، مما يزيد من احتمالية الشراء.",
+                points: 3
+            },
+            {
+                id: 9,
+                text: "الذكاء الاصطناعي يمكن أن يخصص العروض والمنتجات للعملاء بناءً على سلوكهم واهتماماتهم.",
+                type: "true-false",
+                correctAnswer: true,
+                explanation: "هذه العبارة صحيحة. الذكاء الاصطناعي يحلل سلوك العملاء واهتماماتهم لتقديم عروض ومنتجات مخصصة، مما يحسن تجربة التسوق ويزيد المبيعات.",
+                points: 3
+            },
+            {
+                id: 10,
+                text: "ما هي مزايا استخدام الرسائل النصية القصيرة في التسويق الرقمي؟",
+                type: "multiple-choice",
+                options: [
+                    "وصول مباشر للهاتف المحمول مع معدل استجابة أعلى من البريد الإلكتروني",
+                    "معدل استجابة أقل من البريد الإلكتروني",
+                    "تصل فقط إلى عدد محدود من العملاء",
+                    "تكلفة عالية وفعالية منخفضة"
+                ],
+                correctAnswer: 0,
+                explanation: "الرسائل النصية تضمن وصول الرسائل مباشرة إلى الهاتف المحمول للعميل، مع معدل فتح واستجابة أعلى بكثير من البريد الإلكتروني.",
+                points: 3
+            },
+            {
+                id: 11,
+                text: "الواقع المعزز يسمح للعملاء بمعاينة المنتجات في بيئتهم الحقيقية قبل الشراء.",
+                type: "true-false",
+                correctAnswer: true,
+                explanation: "هذه العبارة صحيحة. الواقع المعزز يمكن العملاء من تجربة المنتجات في بيئتهم الحقيقية، مثل رؤية الأثاث في غرفهم، مما يقلل من الشكوك ويزيد الثقة في الشراء.",
+                points: 3
+            },
+            {
+                id: 12,
+                text: "ما هي الخطوات الأساسية لتطوير متجر إلكتروني؟",
+                type: "multiple-choice",
+                options: [
+                    "التخطيط (تحديد الأهداف والجمهور)، التصميم (اختيار المنصة وتصميم الواجهة)، الإطلاق (وضع خطة تسويقية واختيار بوابات الدفع)",
+                    "البدء بالتسويق قبل التصميم، اختيار منصة عشوائية، تجاهل خطة التسويق",
+                    "لا توجد خطوات محددة لتطوير متجر إلكتروني",
+                    "الاعتماد على المنصات المجانية فقط"
+                ],
+                correctAnswer: 0,
+                explanation: "الخطوات الأساسية هي: التخطيط (تحديد الأهداف والجمهور المستهدف)، التصميم (اختيار منصة مناسبة وتصميم واجهة سهلة الاستخدام)، الإطلاق (وضع خطة تسويقية واختيار بوابات دفع آمنة).",
+                points: 3
+            },
+            {
+                id: 13,
+                text: "يجب أن تكون منصة التجارة الإلكترونية متوافقة مع حجم الأعمال، سهلة الاستخدام، وتدعم خيارات الدفع والشحن المناسبة.",
+                type: "true-false",
+                correctAnswer: true,
+                explanation: "هذه العبارة صحيحة. اختيار المنصة المناسب يعتمد على حجم الأعمال، سهولة الاستخدام، ودعم خيارات الدفع والشحن المختلفة.",
+                points: 3
+            },
+            {
+                id: 14,
+                text: "ما أهمية تحسين واجهة المستخدم (UI) وتجربة المستخدم (UX) في المتجر الإلكتروني؟",
+                type: "multiple-choice",
+                options: [
+                    "تسهيل التنقل في المتجر وزيادة احتمالية إتمام عمليات الشراء",
+                    "لا تأثير لهما على عمليات الشراء",
+                    "تجعل المتجر أكثر تعقيداً",
+                    "تقتصر على الجانب الجمالي فقط"
+                ],
+                correctAnswer: 0,
+                explanation: "تحسين واجهة المستخدم يسهل التنقل في المتجر، وتحسين تجربة المستخدم يجعل عملية التسوق سلسة وممتعة، مما يزيد من احتمالية إتمام عمليات الشراء.",
+                points: 3
+            },
+            {
+                id: 15,
+                text: "Google Analytics و Hotjar هما أداتان لتحليل أداء المتجر الإلكتروني.",
+                type: "true-false",
+                correctAnswer: true,
+                explanation: "هذه العبارة صحيحة. Google Analytics لتحليل حركة الزوار والسلوك، وHotjar لتحليل تفاعل المستخدمين وسلوكهم في الموقع.",
+                points: 3
+            },
+            {
+                id: 16,
+                text: "ما هي العوامل الرئيسية لاختيار بوابة الدفع المناسبة؟",
+                type: "multiple-choice",
+                options: [
+                    "تدعم طرق دفع متعددة، آمنة، وسهلة التكامل مع المنصة",
+                    "تكلفتها فقط هي المهم",
+                    "لا يوجد عوامل محددة للاختيار",
+                    "تقتصر على الدفع نقداً عند الاستلام"
+                ],
+                correctAnswer: 0,
+                explanation: "يجب أن تدعم بوابة الدفع طرق دفع متعددة (بطاقات ائتمان، محافظ إلكترونية)، تكون آمنة (تشفير البيانات)، وسهلة التكامل مع منصة المتجر.",
+                points: 3
+            },
+            {
+                id: 17,
+                text: "استخدام بروتوكولات الأمان مثل SSL والتحقق بخطوتين يضمن أمان المعاملات المالية وحماية بيانات العملاء.",
+                type: "true-false",
+                correctAnswer: true,
+                explanation: "هذه العبارة صحيحة. بروتوكولات الأمان مثل SSL تشفر البيانات، والتحقق بخطوتين يضيف طبقة أمان إضافية، مما يحمي المعاملات المالية وبيانات العملاء.",
+                points: 3
+            },
+            {
+                id: 18,
+                text: "ما هي الإجراءات لضمان التزام المتجر الإلكتروني بالضرائب والفواتير الإلكترونية؟",
+                type: "multiple-choice",
+                options: [
+                    "استخدام أدوات حساب الضرائب التلقائية، توفير فواتير إلكترونية، والالتزام بالقوانين المحلية والدولية",
+                    "تجاهل الضرائب والفواتير",
+                    "الاعتماد على العميل في حساب الضرائب",
+                    "لا توجد إجراءات ضرورية"
+                ],
+                correctAnswer: 0,
+                explanation: "يجب استخدام أدوات حساب الضرائب التلقائية، توفير فواتير إلكترونية صحيحة، وضمان الالتزام بالقوانين الضريبية المحلية والدولية.",
+                points: 3
+            },
+            {
+                id: 19,
+                text: "بوابات الدفع المدعمة لعملات متعددة وطرق دفع محلية وعالمية تساهم في توسيع قاعدة العملاء وتحسين تجربة الدفع.",
+                type: "true-false",
+                correctAnswer: true,
+                explanation: "هذه العبارة صحيحة. دعم عملات متعددة وطرق دفع متنوعة يجعل المتجر يلبي احتياجات عملاء من مختلف البلدان، ويحسن تجربة الدفع مما يزيد المبيعات.",
+                points: 3
+            },
+            {
+                id: 20,
+                text: "كيف يمكن للذكاء الاصطناعي تحسين تجربة العملاء في التسويق الرقمي؟",
+                type: "multiple-choice",
+                options: [
+                    "بتخصيص العروض والمنتجات بناءً على سلوك واهتمامات العملاء",
+                    "بتقليل التفاعل مع العملاء",
+                    "باستخدام أساليب تسويق عشوائية",
+                    "بالاعتماد على التخمين في تفضيلات العملاء"
+                ],
+                correctAnswer: 0,
+                explanation: "الذكاء الاصطناعي يحلل بيانات وسلوك العملاء لفهم اهتماماتهم وتفضيلاتهم، ثم يقدم عروض ومنتجات مخصصة لكل عميل، مما يحسن تجربة التسوق ويزيد الولاء.",
+                points: 3
+            }
+        ];
+
+        // مفاتيح التخزين المحلي
+        const STORAGE_KEYS = {
+            EXAM_STARTED: 'exam_started',
+            EXAM_COMPLETED: 'exam_completed',
+            STUDENT_DATA: 'student_data',
+            EXAM_DATA: 'exam_data',
+            TIME_LEFT: 'time_left',
+            ANSWERS: 'answers',
+            CURRENT_QUESTION: 'current_question'
+        };
+
+        // المتغيرات العامة
+        let currentExamType = "";
+        let selectedQuestions = [];
+        let studentAnswers = {};
+        let timerInterval;
+        let timeLeft = 60 * 60; // 60 دقيقة بالثواني
+        let examStarted = false;
+        let studentName = "";
+        let studentId = "";
+        let currentQuestionIndex = 0;
+
+        // عناصر DOM
+        const studentInfoScreen = document.getElementById('student-info-screen');
+        const examScreen = document.getElementById('exam-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const forcedSubmitScreen = document.getElementById('forced-submit-screen');
+        const examCompletedScreen = document.getElementById('exam-completed-screen');
+        const resumeExamSection = document.getElementById('resume-exam-section');
+        const resumeExamInfo = document.getElementById('resume-exam-info');
+        const startExamBtn = document.getElementById('start-exam-btn');
+        const submitExamBtn = document.getElementById('submit-exam-btn');
+        const resumeExamBtn = document.getElementById('resume-exam-btn');
+        const restartNewExamBtn = document.getElementById('restart-new-exam-btn');
+        const questionsContainer = document.getElementById('questions-container');
+        const questionNavigation = document.getElementById('question-navigation');
+        const progressBar = document.getElementById('progress-bar');
+        const timerDisplay = document.getElementById('timer');
+        const studentInfoResult = document.getElementById('student-info-result');
+        const scoreDisplay = document.getElementById('score-display');
+        const resultMessage = document.getElementById('result-message');
+        const answersReview = document.getElementById('answers-review');
+        const examTypeBtns = document.querySelectorAll('.exam-type-btn');
+        const themeToggle = document.getElementById('theme-toggle');
+        const displayStudentName = document.getElementById('display-student-name');
+        const displayStudentId = document.getElementById('display-student-id');
+        const displayExamType = document.getElementById('display-exam-type');
+        const forcedStudentInfo = document.getElementById('forced-student-info');
+        const forcedScoreDisplay = document.getElementById('forced-score-display');
+        const forcedResultMessage = document.getElementById('forced-result-message');
+        const forcedAnswersReview = document.getElementById('forced-answers-review');
+        const completedStudentInfo = document.getElementById('completed-student-info');
+        const completedScoreDisplay = document.getElementById('completed-score-display');
+        const completedResultMessage = document.getElementById('completed-result-message');
+        const completedAnswersReview = document.getElementById('completed-answers-review');
+        const totalScoreElement = document.getElementById('total-score');
+        const correctCountElement = document.getElementById('correct-count');
+        const totalQuestionsElement = document.getElementById('total-questions');
+        const forcedTotalScoreElement = document.getElementById('forced-total-score');
+        const forcedCorrectCountElement = document.getElementById('forced-correct-count');
+        const forcedTotalQuestionsElement = document.getElementById('forced-total-questions');
+        const completedTotalScoreElement = document.getElementById('completed-total-score');
+        const completedCorrectCountElement = document.getElementById('completed-correct-count');
+        const completedTotalQuestionsElement = document.getElementById('completed-total-questions');
+        const prevQuestionBtn = document.getElementById('prev-question-btn');
+        const nextQuestionBtn = document.getElementById('next-question-btn');
+        const emergencyExitBtn = document.getElementById('emergency-exit-btn');
+
+        // تهيئة التطبيق
+        function initializeApp() {
+            checkExistingExam();
+            setupEventListeners();
+        }
+
+        // التحقق من وجود امتحان سابق
+        function checkExistingExam() {
+            const examCompleted = localStorage.getItem(STORAGE_KEYS.EXAM_COMPLETED);
+            const examStarted = localStorage.getItem(STORAGE_KEYS.EXAM_STARTED);
+            
+            if (examCompleted === 'true') {
+                // عرض شاشة الامتحان المكتمل
+                showCompletedExamScreen();
+            } else if (examStarted === 'true') {
+                // عرض خيار استئناف الامتحان
+                showResumeExamOption();
+            }
+        }
+
+        // عرض خيار استئناف الامتحان
+        function showResumeExamOption() {
+            const studentData = JSON.parse(localStorage.getItem(STORAGE_KEYS.STUDENT_DATA) || '{}');
+            const timeLeft = localStorage.getItem(STORAGE_KEYS.TIME_LEFT);
+            
+            if (studentData.name && studentData.id && timeLeft) {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                resumeExamInfo.innerHTML = `
+                    <div><strong>الطالب:</strong> ${studentData.name}</div>
+                    <div><strong>الرقم الدراسي:</strong> ${studentData.id}</div>
+                    <div><strong>الوقت المتبقي:</strong> ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</div>
+                `;
+                
+                resumeExamSection.classList.remove('hidden');
+            }
+        }
+
+        // عرض شاشة الامتحان المكتمل
+        function showCompletedExamScreen() {
+            const studentData = JSON.parse(localStorage.getItem(STORAGE_KEYS.STUDENT_DATA) || '{}');
+            const examData = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXAM_DATA) || '{}');
+            
+            studentInfoScreen.classList.add('hidden');
+            examCompletedScreen.classList.remove('hidden');
+            
+            completedStudentInfo.textContent = `الطالب: ${studentData.name} - الرقم الدراسي: ${studentData.id}`;
+            completedScoreDisplay.textContent = `النتيجة: ${examData.totalScore} من 30`;
+            completedScoreDisplay.className = `score ${examData.totalScore >= 18 ? 'correct-answer' : 'wrong-answer'}`;
+            
+            // عرض رسالة حسب النتيجة
+            if (examData.totalScore >= 27) {
+                completedResultMessage.textContent = 'ممتاز! أداء رائع.';
+                completedResultMessage.className = 'alert alert-success';
+            } else if (examData.totalScore >= 24) {
+                completedResultMessage.textContent = 'جيد جداً! أحسنت.';
+                completedResultMessage.className = 'alert alert-success';
+            } else if (examData.totalScore >= 21) {
+                completedResultMessage.textContent = 'جيد! يمكنك التحسين أكثر.';
+                completedResultMessage.className = 'alert alert-warning';
+            } else if (examData.totalScore >= 18) {
+                completedResultMessage.textContent = 'مقبول! تحتاج للمزيد من الدراسة.';
+                completedResultMessage.className = 'alert alert-warning';
+            } else {
+                completedResultMessage.textContent = 'راسب! تحتاج لإعادة الدراسة والمحاولة مرة أخرى.';
+                completedResultMessage.className = 'alert alert-warning';
+            }
+            
+            // عرض تفاصيل الدرجات
+            completedTotalScoreElement.textContent = examData.totalScore;
+            completedCorrectCountElement.textContent = examData.correctCount;
+            completedTotalQuestionsElement.textContent = examData.totalQuestions;
+            
+            // عرض مراجعة الإجابات
+            completedAnswersReview.innerHTML = '';
+            if (examData.review) {
+                examData.review.forEach(reviewItem => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = `review-item ${reviewItem.isCorrect ? 'correct' : 'incorrect'}`;
+                    itemElement.innerHTML = reviewItem.html;
+                    completedAnswersReview.appendChild(itemElement);
+                });
+            }
+        }
+
+        // إعداد معالجات الأحداث
+        function setupEventListeners() {
+            // تبديل الوضع الليلي
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                if (document.body.classList.contains('dark-mode')) {
+                    themeToggle.textContent = '☀️';
+                } else {
+                    themeToggle.textContent = '🌙';
+                }
+            });
+
+            // اختيار نوع الامتحان
+            examTypeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    examTypeBtns.forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    currentExamType = btn.getAttribute('data-type');
+                });
+            });
+
+            // بدء الامتحان
+            startExamBtn.addEventListener('click', startNewExam);
+
+            // استئناف الامتحان
+            resumeExamBtn.addEventListener('click', resumeExam);
+
+            // بدء امتحان جديد (بدون استئناف)
+            restartNewExamBtn.addEventListener('click', startNewExam);
+
+            // تسليم الإجابات
+            submitExamBtn.addEventListener('click', submitExam);
+
+            // التنقل بين الأسئلة
+            prevQuestionBtn.addEventListener('click', showPreviousQuestion);
+            nextQuestionBtn.addEventListener('click', showNextQuestion);
+
+            // زر الخروج الطارئ
+            emergencyExitBtn.addEventListener('click', () => {
+                if (examStarted) {
+                    handleEmergencyExit();
+                } else {
+                    alert('لا يوجد امتحان قيد التقدم حالياً.');
+                }
+            });
+        }
+
+        // معالجة الخروج الطارئ
+        function handleEmergencyExit() {
+            if (examStarted) {
+                if (confirm('هل أنت متأكد من الخروج من الامتحان؟ سيتم تسليم إجاباتك الحالية.')) {
+                    clearInterval(timerInterval);
+                    examStarted = false;
+                    cleanupStorage();
+                    calculateResults();
+                }
+            }
+        }
+
+        // بدء امتحان جديد
+        function startNewExam() {
+            studentName = document.getElementById('student-name').value;
+            studentId = document.getElementById('student-id').value;
+            
+            if (!studentName || !studentId) {
+                alert('يرجى إدخال اسم الطالب والرقم الدراسي');
+                return;
+            }
+            
+            if (!currentExamType) {
+                alert('يرجى اختيار نوع الامتحان');
+                return;
+            }
+            
+            // حفظ بيانات الطالب
+            localStorage.setItem(STORAGE_KEYS.STUDENT_DATA, JSON.stringify({
+                name: studentName,
+                id: studentId,
+                examType: currentExamType
+            }));
+            
+            // اختيار الأسئلة حسب نوع الامتحان
+            if (currentExamType === 'mixed') {
+                // اختيار 10 أسئلة متنوعة (5 صح وخطأ، 5 اختيار من متعدد)
+                const trueFalseQuestions = questions.filter(q => q.type === 'true-false');
+                const multipleChoiceQuestions = questions.filter(q => q.type === 'multiple-choice');
+                
+                const selectedTrueFalse = getRandomQuestions(trueFalseQuestions, 5);
+                const selectedMultipleChoice = getRandomQuestions(multipleChoiceQuestions, 5);
+                
+                selectedQuestions = [...selectedTrueFalse, ...selectedMultipleChoice];
+                // خلط الأسئلة
+                selectedQuestions = shuffleArray(selectedQuestions);
+            } else {
+                // اختيار 10 أسئلة من النوع المحدد
+                const filteredQuestions = questions.filter(q => q.type === currentExamType);
+                selectedQuestions = getRandomQuestions(filteredQuestions, 10);
+            }
+            
+            // تهيئة الإجابات
+            studentAnswers = {};
+            selectedQuestions.forEach(q => {
+                studentAnswers[q.id] = null;
+            });
+            
+            // حفظ بيانات الامتحان
+            localStorage.setItem(STORAGE_KEYS.EXAM_DATA, JSON.stringify({
+                questions: selectedQuestions,
+                answers: studentAnswers
+            }));
+            
+            // بدء الامتحان
+            startExam();
+        }
+
+        // استئناف الامتحان
+        function resumeExam() {
+            const studentData = JSON.parse(localStorage.getItem(STORAGE_KEYS.STUDENT_DATA) || '{}');
+            const examData = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXAM_DATA) || '{}');
+            const savedTimeLeft = localStorage.getItem(STORAGE_KEYS.TIME_LEFT);
+            const savedAnswers = JSON.parse(localStorage.getItem(STORAGE_KEYS.ANSWERS) || '{}');
+            const savedCurrentQuestion = localStorage.getItem(STORAGE_KEYS.CURRENT_QUESTION);
+            
+            studentName = studentData.name;
+            studentId = studentData.id;
+            currentExamType = studentData.examType;
+            selectedQuestions = examData.questions || [];
+            studentAnswers = savedAnswers;
+            timeLeft = parseInt(savedTimeLeft) || 60 * 60;
+            currentQuestionIndex = parseInt(savedCurrentQuestion) || 0;
+            
+            // تحديث واجهة اختيار نوع الامتحان
+            examTypeBtns.forEach(btn => {
+                if (btn.getAttribute('data-type') === currentExamType) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+            
+            startExam();
+        }
+
+        // بدء الامتحان (عام)
+        function startExam() {
+            // تعيين حالة الامتحان
+            localStorage.setItem(STORAGE_KEYS.EXAM_STARTED, 'true');
+            examStarted = true;
+            
+            // عرض شاشة الامتحان
+            studentInfoScreen.classList.add('hidden');
+            examScreen.classList.remove('hidden');
+            
+            // تعيين بيانات الطالب للعرض
+            displayStudentName.textContent = studentName;
+            displayStudentId.textContent = studentId;
+            displayExamType.textContent = getExamTypeDisplayName(currentExamType);
+            
+            // عرض الأسئلة
+            renderQuestions();
+            
+            // بدء المؤقت
+            startTimer();
+            
+            // تفعيل مراقبة الخروج من الصفحة
+            setupPageVisibilityCheck();
+            
+            // حفظ الوقت المتبقي بانتظام
+            setInterval(saveExamProgress, 5000); // كل 5 ثواني
+        }
+
+        // الحصول على اسم العرض لنوع الامتحان
+        function getExamTypeDisplayName(type) {
+            switch(type) {
+                case 'true-false': return 'صح وخطأ';
+                case 'multiple-choice': return 'اختيار الإجابة الصحيحة';
+                case 'mixed': return 'امتحان شامل';
+                default: return type;
+            }
+        }
+
+        // حفظ تقدم الامتحان
+        function saveExamProgress() {
+            if (examStarted) {
+                localStorage.setItem(STORAGE_KEYS.TIME_LEFT, timeLeft.toString());
+                localStorage.setItem(STORAGE_KEYS.ANSWERS, JSON.stringify(studentAnswers));
+                localStorage.setItem(STORAGE_KEYS.CURRENT_QUESTION, currentQuestionIndex.toString());
+            }
+        }
+
+        // تسليم الامتحان
+        function submitExam() {
+            // التحقق من إجابة جميع الأسئلة
+            const unanswered = selectedQuestions.filter(q => studentAnswers[q.id] === null);
+            
+            if (unanswered.length > 0) {
+                if (!confirm(`لم تقم بالإجابة على ${unanswered.length} سؤال. هل تريد التسليم مع ذلك؟`)) {
+                    return;
+                }
+            }
+            
+            clearInterval(timerInterval);
+            examStarted = false;
+            
+            // تنظيف التخزين المحلي
+            cleanupStorage();
+            
+            calculateResults();
+        }
+
+        // تنظيف التخزين المحلي
+        function cleanupStorage() {
+            localStorage.removeItem(STORAGE_KEYS.EXAM_STARTED);
+            localStorage.removeItem(STORAGE_KEYS.TIME_LEFT);
+            localStorage.removeItem(STORAGE_KEYS.ANSWERS);
+            localStorage.removeItem(STORAGE_KEYS.EXAM_DATA);
+            localStorage.removeItem(STORAGE_KEYS.CURRENT_QUESTION);
+            
+            // وضع علامة أن الامتحان مكتمل
+            localStorage.setItem(STORAGE_KEYS.EXAM_COMPLETED, 'true');
+        }
+
+        // خلط مصفوفة
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // الحصول على أسئلة عشوائية
+        function getRandomQuestions(questionsArray, count) {
+            const shuffled = shuffleArray(questionsArray);
+            return shuffled.slice(0, count);
+        }
+
+        // عرض الأسئلة
+        function renderQuestions() {
+            questionsContainer.innerHTML = '';
+            questionNavigation.innerHTML = '';
+            
+            // إنشاء نقاط التنقل بين الأسئلة
+            selectedQuestions.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'question-dot';
+                if (index === currentQuestionIndex) {
+                    dot.classList.add('current');
+                }
+                if (studentAnswers[selectedQuestions[index].id] !== null) {
+                    dot.classList.add('answered');
+                } else {
+                    dot.classList.add('unanswered');
+                }
+                dot.textContent = index + 1;
+                dot.addEventListener('click', () => {
+                    currentQuestionIndex = index;
+                    renderQuestions();
+                });
+                questionNavigation.appendChild(dot);
+            });
+            
+            // إظهار سؤال واحد فقط في كل مرة
+            if (selectedQuestions.length > 0) {
+                const question = selectedQuestions[currentQuestionIndex];
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question-container';
+                questionElement.id = `question-${question.id}`;
+                
+                // إضافة عداد الأسئلة
+                const questionCounter = document.createElement('div');
+                questionCounter.className = 'question-counter';
+                questionCounter.innerHTML = `السؤال <span class="question-number">${currentQuestionIndex + 1}</span> من ${selectedQuestions.length}`;
+                questionElement.appendChild(questionCounter);
+                
+                const questionText = document.createElement('div');
+                questionText.className = 'question-text';
+                questionText.textContent = question.text;
+                questionElement.appendChild(questionText);
+                
+                if (question.type === 'multiple-choice') {
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'options-container';
+                    
+                    // عرض الخيارات بنفس الترتيب دائماً (بدون خلط)
+                    question.options.forEach((option, optionIndex) => {
+                        const optionElement = document.createElement('div');
+                        optionElement.className = `option ${studentAnswers[question.id] === optionIndex ? 'selected' : ''}`;
+                        optionElement.textContent = option;
+                        optionElement.addEventListener('click', () => {
+                            // إلغاء تحديد الخيارات الأخرى
+                            optionsContainer.querySelectorAll('.option').forEach(opt => {
+                                opt.classList.remove('selected');
+                            });
+                            
+                            // تحديد الخيار الحالي
+                            optionElement.classList.add('selected');
+                            studentAnswers[question.id] = optionIndex;
+                            updateProgress();
+                            renderQuestions(); // تحديث نقاط التنقل
+                        });
+                        
+                        optionsContainer.appendChild(optionElement);
+                    });
+                    
+                    questionElement.appendChild(optionsContainer);
+                } else if (question.type === 'true-false') {
+                    const trueFalseContainer = document.createElement('div');
+                    trueFalseContainer.className = 'true-false-container';
+                    
+                    // أزرار صح وخطأ ثابتة في أماكنها (بدون خلط)
+                    const trueBtn = document.createElement('div');
+                    trueBtn.className = `true-false-btn ${studentAnswers[question.id] === true ? 'selected-true' : ''}`;
+                    trueBtn.textContent = 'صح';
+                    trueBtn.addEventListener('click', () => {
+                        // إلغاء تحديد الزر الآخر
+                        trueFalseContainer.querySelectorAll('.true-false-btn').forEach(b => {
+                            b.classList.remove('selected-true', 'selected-false');
+                        });
+                        
+                        // تحديد الزر الحالي
+                        trueBtn.classList.add('selected-true');
+                        studentAnswers[question.id] = true;
+                        
+                        updateProgress();
+                        renderQuestions(); // تحديث نقاط التنقل
+                    });
+                    
+                    const falseBtn = document.createElement('div');
+                    falseBtn.className = `true-false-btn ${studentAnswers[question.id] === false ? 'selected-false' : ''}`;
+                    falseBtn.textContent = 'خطأ';
+                    falseBtn.addEventListener('click', () => {
+                        // إلغاء تحديد الزر الآخر
+                        trueFalseContainer.querySelectorAll('.true-false-btn').forEach(b => {
+                            b.classList.remove('selected-true', 'selected-false');
+                        });
+                        
+                        // تحديد الزر الحالي
+                        falseBtn.classList.add('selected-false');
+                        studentAnswers[question.id] = false;
+                        
+                        updateProgress();
+                        renderQuestions(); // تحديث نقاط التنقل
+                    });
+                    
+                    trueFalseContainer.appendChild(trueBtn);
+                    trueFalseContainer.appendChild(falseBtn);
+                    questionElement.appendChild(trueFalseContainer);
+                }
+                
+                questionsContainer.appendChild(questionElement);
+            }
+            
+            // تحديث أزرار التنقل
+            updateNavigationButtons();
+            updateProgress();
+        }
+
+        // تحديث أزرار التنقل
+        function updateNavigationButtons() {
+            // إخفاء زر السابق إذا كنا في السؤال الأول
+            if (currentQuestionIndex === 0) {
+                prevQuestionBtn.classList.add('hidden');
+            } else {
+                prevQuestionBtn.classList.remove('hidden');
+            }
+            
+            // إخفاء زر التالي إذا كنا في السؤال الأخير
+            if (currentQuestionIndex === selectedQuestions.length - 1) {
+                nextQuestionBtn.classList.add('hidden');
+            } else {
+                nextQuestionBtn.classList.remove('hidden');
+            }
+        }
+
+        // عرض السؤال السابق
+        function showPreviousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestions();
+            }
+        }
+
+        // عرض السؤال التالي
+        function showNextQuestion() {
+            if (currentQuestionIndex < selectedQuestions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestions();
+            }
+        }
+
+        // تحديث شريط التقدم
+        function updateProgress() {
+            const answeredCount = Object.values(studentAnswers).filter(answer => answer !== null).length;
+            const progressPercentage = (answeredCount / selectedQuestions.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+
+        // بدء المؤقت
+        function startTimer() {
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    examStarted = false;
+                    cleanupStorage();
+                    alert('انتهى وقت الامتحان! سيتم تسليم إجاباتك تلقائياً.');
+                    calculateResults();
+                }
+            }, 1000);
+        }
+
+        // تحديث عرض المؤقت
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `الوقت المتبقي: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // تغيير اللون عندما يقل الوقت عن 10 دقائق
+            if (timeLeft < 600) {
+                timerDisplay.style.color = 'var(--danger-color)';
+                timerDisplay.style.backgroundColor = 'rgba(231, 76, 60, 0.1)';
+            } else if (timeLeft < 1200) {
+                timerDisplay.style.color = 'var(--warning-color)';
+                timerDisplay.style.backgroundColor = 'rgba(243, 156, 18, 0.1)';
+            } else {
+                timerDisplay.style.color = 'var(--dark-color)';
+                timerDisplay.style.backgroundColor = 'rgba(0,0,0,0.05)';
+            }
+        }
+
+        // حساب النتائج
+        function calculateResults() {
+            let correctCount = 0;
+            let totalScore = 0;
+            const reviewItems = [];
+            
+            selectedQuestions.forEach((question, index) => {
+                const userAnswer = studentAnswers[question.id];
+                let isCorrect = false;
+                let correctAnswerText = '';
+                let userAnswerText = '';
+                
+                if (question.type === 'multiple-choice') {
+                    isCorrect = userAnswer === question.correctAnswer;
+                    correctAnswerText = question.options[question.correctAnswer];
+                    userAnswerText = userAnswer !== null ? question.options[userAnswer] : 'لم يتم الإجابة';
+                } else if (question.type === 'true-false') {
+                    isCorrect = userAnswer === question.correctAnswer;
+                    correctAnswerText = question.correctAnswer ? 'صح' : 'خطأ';
+                    userAnswerText = userAnswer !== null ? (userAnswer ? 'صح' : 'خطأ') : 'لم يتم الإجابة';
+                }
+                
+                if (isCorrect) {
+                    correctCount++;
+                    totalScore += question.points;
+                }
+                
+                // حفظ عناصر المراجعة
+                reviewItems.push({
+                    isCorrect,
+                    html: `
+                        <div class="question-text">${index + 1}. ${question.text}</div>
+                        <div><strong>إجابتك:</strong> ${userAnswerText}</div>
+                        <div><strong>الإجابة الصحيحة:</strong> ${correctAnswerText}</div>
+                        <div><strong>الدرجة:</strong> ${isCorrect ? question.points : 0} من ${question.points}</div>
+                        ${question.explanation ? `<div><strong>التوضيح:</strong> ${question.explanation}</div>` : ''}
+                    `
+                });
+            });
+            
+            // حفظ نتيجة الامتحان
+            localStorage.setItem(STORAGE_KEYS.EXAM_COMPLETED, 'true');
+            localStorage.setItem(STORAGE_KEYS.EXAM_DATA, JSON.stringify({
+                totalScore: totalScore,
+                correctCount: correctCount,
+                totalQuestions: selectedQuestions.length,
+                review: reviewItems
+            }));
+            
+            // عرض شاشة النتائج
+            examScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            
+            // عرض معلومات الطالب
+            studentInfoResult.textContent = `الطالب: ${studentName} - الرقم الدراسي: ${studentId}`;
+            
+            // عرض النتيجة
+            scoreDisplay.textContent = `النتيجة: ${totalScore} من 30`;
+            scoreDisplay.className = `score ${totalScore >= 18 ? 'correct-answer' : 'wrong-answer'}`;
+            
+            // عرض رسالة حسب النتيجة
+            if (totalScore >= 27) {
+                resultMessage.textContent = 'ممتاز! أداء رائع.';
+                resultMessage.className = 'alert alert-success';
+            } else if (totalScore >= 24) {
+                resultMessage.textContent = 'جيد جداً! أحسنت.';
+                resultMessage.className = 'alert alert-success';
+            } else if (totalScore >= 21) {
+                resultMessage.textContent = 'جيد! يمكنك التحسين أكثر.';
+                resultMessage.className = 'alert alert-warning';
+            } else if (totalScore >= 18) {
+                resultMessage.textContent = 'مقبول! تحتاج للمزيد من الدراسة.';
+                resultMessage.className = 'alert alert-warning';
+            } else {
+                resultMessage.textContent = 'راسب! تحتاج لإعادة الدراسة والمحاولة مرة أخرى.';
+                resultMessage.className = 'alert alert-warning';
+            }
+            
+            // عرض تفاصيل الدرجات
+            totalScoreElement.textContent = totalScore;
+            correctCountElement.textContent = correctCount;
+            totalQuestionsElement.textContent = selectedQuestions.length;
+            
+            // عرض مراجعة الإجابات
+            answersReview.innerHTML = '';
+            reviewItems.forEach(item => {
+                const reviewItem = document.createElement('div');
+                reviewItem.className = `review-item ${item.isCorrect ? 'correct' : 'incorrect'}`;
+                reviewItem.innerHTML = item.html;
+                answersReview.appendChild(reviewItem);
+            });
+        }
+
+        // إعداد مراقبة الخروج من الصفحة
+        function setupPageVisibilityCheck() {
+            // مراقبة تغيير visibility الصفحة
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            
+            // مراقبة إغلاق النافذة/التبويب
+            window.addEventListener('beforeunload', handleBeforeUnload);
+            
+            // مراقبة محاولة الانتقال إلى صفحة أخرى
+            window.addEventListener('unload', handleUnload);
+        }
+
+        // معالجة تغيير visibility الصفحة
+        function handleVisibilityChange() {
+            if (document.hidden && examStarted) {
+                // إذا أصبحت الصفحة غير مرئية (مثل التبديل إلى تبويب آخر)
+                forceSubmitExam();
+            }
+        }
+
+        // معالجة قبل إغلاق الصفحة
+        function handleBeforeUnload(event) {
+            if (examStarted) {
+                // منع الإغلاق وإظهار رسالة تحذير
+                event.preventDefault();
+                event.returnValue = 'إذا غادرت الصفحة سيتم إنهاء الامتحان تلقائياً. هل أنت متأكد؟';
+                return event.returnValue;
+            }
+        }
+
+        // معالجة إغلاق الصفحة
+        function handleUnload() {
+            if (examStarted) {
+                // إذا حاول المستخدم الخروج رغم التحذير
+                forceSubmitExam();
+            }
+        }
+
+        // الإنهاء القسري للامتحان
+        function forceSubmitExam() {
+            if (!examStarted) return;
+            
+            clearInterval(timerInterval);
+            examStarted = false;
+            
+            // إزالة معالجات الأحداث
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            window.removeEventListener('unload', handleUnload);
+            
+            // تنظيف التخزين المحلي
+            cleanupStorage();
+            
+            // حساب النتائج
+            let correctCount = 0;
+            let totalScore = 0;
+            const reviewItems = [];
+            
+            selectedQuestions.forEach((question, index) => {
+                const userAnswer = studentAnswers[question.id];
+                let isCorrect = false;
+                let correctAnswerText = '';
+                let userAnswerText = '';
+                
+                if (question.type === 'multiple-choice') {
+                    isCorrect = userAnswer === question.correctAnswer;
+                    correctAnswerText = question.options[question.correctAnswer];
+                    userAnswerText = userAnswer !== null ? question.options[userAnswer] : 'لم يتم الإجابة';
+                } else if (question.type === 'true-false') {
+                    isCorrect = userAnswer === question.correctAnswer;
+                    correctAnswerText = question.correctAnswer ? 'صح' : 'خطأ';
+                    userAnswerText = userAnswer !== null ? (userAnswer ? 'صح' : 'خطأ') : 'لم يتم الإجابة';
+                }
+                
+                if (isCorrect) {
+                    correctCount++;
+                    totalScore += question.points;
+                }
+                
+                // حفظ عناصر المراجعة
+                reviewItems.push({
+                    isCorrect,
+                    html: `
+                        <div class="question-text">${index + 1}. ${question.text}</div>
+                        <div><strong>إجابتك:</strong> ${userAnswerText}</div>
+                        <div><strong>الإجابة الصحيحة:</strong> ${correctAnswerText}</div>
+                        <div><strong>الدرجة:</strong> ${isCorrect ? question.points : 0} من ${question.points}</div>
+                        ${question.explanation ? `<div><strong>التوضيح:</strong> ${question.explanation}</div>` : ''}
+                    `
+                });
+            });
+            
+            // حفظ نتيجة الامتحان
+            localStorage.setItem(STORAGE_KEYS.EXAM_COMPLETED, 'true');
+            localStorage.setItem(STORAGE_KEYS.EXAM_DATA, JSON.stringify({
+                totalScore: totalScore,
+                correctCount: correctCount,
+                totalQuestions: selectedQuestions.length,
+                review: reviewItems
+            }));
+            
+            // عرض شاشة الإنهاء القسري
+            examScreen.classList.add('hidden');
+            forcedSubmitScreen.classList.remove('hidden');
+            
+            // عرض معلومات الطالب
+            forcedStudentInfo.textContent = `الطالب: ${studentName} - الرقم الدراسي: ${studentId}`;
+            
+            // عرض النتيجة
+            forcedScoreDisplay.textContent = `النتيجة: ${totalScore} من 30`;
+            forcedScoreDisplay.className = `score ${totalScore >= 18 ? 'correct-answer' : 'wrong-answer'}`;
+            
+            // عرض رسالة حسب النتيجة
+            if (totalScore >= 27) {
+                forcedResultMessage.textContent = 'ممتاز! أداء رائع.';
+                forcedResultMessage.className = 'alert alert-success';
+            } else if (totalScore >= 24) {
+                forcedResultMessage.textContent = 'جيد جداً! أحسنت.';
+                forcedResultMessage.className = 'alert alert-success';
+            } else if (totalScore >= 21) {
+                forcedResultMessage.textContent = 'جيد! يمكنك التحسين أكثر.';
+                forcedResultMessage.className = 'alert alert-warning';
+            } else if (totalScore >= 18) {
+                forcedResultMessage.textContent = 'مقبول! تحتاج للمزيد من الدراسة.';
+                forcedResultMessage.className = 'alert alert-warning';
+            } else {
+                forcedResultMessage.textContent = 'راسب! تحتاج لإعادة الدراسة والمحاولة مرة أخرى.';
+                forcedResultMessage.className = 'alert alert-warning';
+            }
+            
+            // عرض تفاصيل الدرجات
+            forcedTotalScoreElement.textContent = totalScore;
+            forcedCorrectCountElement.textContent = correctCount;
+            forcedTotalQuestionsElement.textContent = selectedQuestions.length;
+            
+            // عرض مراجعة الإجابات
+            forcedAnswersReview.innerHTML = '';
+            reviewItems.forEach(item => {
+                const reviewItem = document.createElement('div');
+                reviewItem.className = `review-item ${item.isCorrect ? 'correct' : 'incorrect'}`;
+                reviewItem.innerHTML = item.html;
+                forcedAnswersReview.appendChild(reviewItem);
+            });
+        }
+
+        // تهيئة التطبيق عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
 
